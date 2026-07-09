@@ -7,7 +7,7 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 
 DATABASE_DIR = PROJECT_ROOT / "database"
-DATABASE_PATH = DATABASE_DIR / "warehouse.duckdb"
+DATABASE_PATH = DATABASE_DIR / "ads.duckdb"
 
 REPORTS_DIR = PROJECT_ROOT / "reports"
 
