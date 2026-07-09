@@ -14,7 +14,7 @@ def setup_db(tmp_path):
     db_path = tmp_path / "ads.duckdb"
     load_raw_data(db_path=db_path, raw_dir=raw_dir)
     
-    sql_dir = PROJECT_ROOT / "sql" / "staging"
+    sql_dir = PROJECT_ROOT / "sql"
     execute_sql_files(db_path=db_path, sql_dir=sql_dir)
     
     return db_path
