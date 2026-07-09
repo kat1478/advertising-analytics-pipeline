@@ -17,3 +17,22 @@ synthetic ad data → raw tables → staging SQL → analytical marts → report
 - **pandas** for data manipulation
 - **pytest** for data quality and pipeline testing
 - **GitHub Actions** for CI
+
+## Setup Instructions
+
+This project uses `mamba` (or `conda`) for environment management to ensure consistent dependencies.
+
+1. **Create the environment:**
+   ```bash
+   mamba env create -f environment.yml
+   ```
+2. **Activate the environment:**
+   ```bash
+   mamba activate ads-analytics-pipeline
+   ```
+
+**Fallback (pip):**
+If you do not use `mamba` or `conda`, you can install the dependencies via `pip`:
+```bash
+python -m pip install -r requirements.txt
+```
