@@ -7,7 +7,7 @@ def test_load_raw_data(tmp_path):
     raw_dir.mkdir()
     generate_data_main(output_dir=raw_dir)
     
-    db_path = tmp_path / "warehouse.duckdb"
+    db_path = tmp_path / "ads.duckdb"
     
     load_raw_data(db_path=db_path, raw_dir=raw_dir)
     
