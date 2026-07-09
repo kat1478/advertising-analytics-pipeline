@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+secrets.*
+*.pem
+*.key
+*.token
+
+# Local databases and generated data
+*.duckdb
+*.duckdb.wal
+*.db
+*.sqlite
+*.sqlite3
+database/*.duckdb
+database/*.duckdb.wal
+data/raw/*.csv
+data/raw/*.parquet
+data/processed/*.csv
+data/processed/*.parquet
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!database/.gitkeep
+
+# Generated large/export files
+*.log
+*.tmp
+*.bak
+*.zip
+*.tar.gz
+reports/*.html
+reports/*.csv
+reports/*.parquet
+
+# Antigravity / local agent-only context — never commit to public repo
+.agent-private/
+.agents/
+.antigravity/
+.antigravity-artifacts/
+AGENT_NOTES.md
+TASK_HANDOFFS/
+mcp_config.json
+.gemini/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

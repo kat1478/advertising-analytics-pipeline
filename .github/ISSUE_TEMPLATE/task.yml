@@ -1,0 +1,46 @@
+name: Task
+about: One focused implementation task
+labels: [task]
+body:
+  - type: input
+    id: branch
+    attributes:
+      label: Branch name
+      description: Suggested branch name, for example feature/002-synthetic-data-generator
+      placeholder: feature/000-short-description
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be achieved?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What files or modules are expected to change?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What must be true for this task to be done?
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: Commands or checks that should be run.
+      placeholder: |
+        pytest -q
+        python -m src.run_pipeline
+    validations:
+      required: true
