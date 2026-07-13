@@ -5,13 +5,16 @@ WITH daily_impressions AS (
     GROUP BY 1, 2, 3
 ),
 daily_clicks AS (
-    SELECT event_date, campaign_id, product_id, COUNT(*) as clicks
-    FROM stg_clicks
+    SELECT i.event_date, c.campaign_id, c.product_id, COUNT(*) as clicks
+    FROM stg_clicks c
+    JOIN stg_impressions i ON c.impression_id = i.impression_id
     GROUP BY 1, 2, 3
 ),
 daily_conversions AS (
-    SELECT event_date, campaign_id, product_id, COUNT(*) as conversions, SUM(revenue) as revenue
-    FROM stg_conversions
+    SELECT i.event_date, cv.campaign_id, cv.product_id, COUNT(*) as conversions, SUM(cv.revenue) as revenue
+    FROM stg_conversions cv
+    JOIN stg_clicks c ON cv.click_id = c.click_id
+    JOIN stg_impressions i ON c.impression_id = i.impression_id
     GROUP BY 1, 2, 3
 ),
 campaign_daily_totals AS (
