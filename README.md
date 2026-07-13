@@ -3,12 +3,18 @@
 This is a professional-grade data engineering portfolio project that demonstrates a robust, reproducible pipeline for advertising analytics. 
 
 ## Business Objective
-The pipeline mimics a cloud data warehouse workflow using local tools. It takes synthetic ad data, loads it into raw tables, applies SQL transformations to create analytical marts, and generates a business-ready markdown report.
+The pipeline mimics a cloud data warehouse workflow using local tools. It takes synthetic ad data, loads it into raw tables, and applies SQL transformations to create analytical marts.
 
 ## Architecture
 ```text
-synthetic ad data → raw tables → staging SQL → analytical marts → report → insights → tests → CI
+synthetic ad data → raw tables → staging SQL → analytical marts → metrics quality tests → CI
 ```
+
+## Key Components
+- **Data Generation:** Deterministic synthetic data generator.
+- **Local Data Warehouse:** DuckDB for fast OLAP queries.
+- **Data Modeling:** Layered SQL transformations (raw, staging, and analytical marts).
+- **Data Quality & Testing:** Comprehensive `pytest` suite for raw data validation and metric correctness (see [METRICS.md](docs/METRICS.md)).
 
 ## Core Stack
 - **Python 3.11+** for data generation, orchestration, and testing
