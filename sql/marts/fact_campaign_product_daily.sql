@@ -1,4 +1,5 @@
-CREATE OR REPLACE TABLE fact_ad_events AS
+-- Grain: event_date × campaign_id × product_id (one aggregated row per day, campaign and product)
+CREATE OR REPLACE TABLE fact_campaign_product_daily AS
 WITH daily_impressions AS (
     SELECT event_date, campaign_id, product_id, COUNT(*) as impressions
     FROM stg_impressions

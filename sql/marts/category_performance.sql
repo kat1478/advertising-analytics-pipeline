@@ -11,6 +11,6 @@ SELECT
     SUM(f.conversions) / NULLIF(SUM(f.clicks), 0) AS conversion_rate,
     SUM(f.revenue) / NULLIF(SUM(f.cost), 0) AS roas,
     SUM(f.cost) / NULLIF(SUM(f.conversions), 0) AS cost_per_conversion
-FROM fact_ad_events f
+FROM fact_campaign_product_daily f
 LEFT JOIN dim_products p ON f.product_id = p.product_id
 GROUP BY 1;

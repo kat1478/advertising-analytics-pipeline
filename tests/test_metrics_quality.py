@@ -109,31 +109,31 @@ def test_category_metric_ranges(setup_db):
     conn.close()
 
 # fact_ad_events tests
-def test_fact_ad_events_exists_and_not_empty(setup_db):
+def test_fact_table_exists_and_not_empty(setup_db):
     conn = duckdb.connect(str(setup_db))
-    count = conn.execute("SELECT COUNT(*) FROM fact_ad_events").fetchone()[0]
+    count = conn.execute("SELECT COUNT(*) FROM fact_campaign_product_daily").fetchone()[0]
     conn.close()
-    assert count > 0, "fact_ad_events is empty"
+    assert count > 0, "fact_campaign_product_daily is empty"
 
-def test_fact_ad_events_no_duplicates(setup_db):
+def test_fact_table_no_duplicates(setup_db):
     conn = duckdb.connect(str(setup_db))
-    dups = conn.execute("SELECT COUNT(*) FROM (SELECT event_date, campaign_id, product_id FROM fact_ad_events GROUP BY 1, 2, 3 HAVING COUNT(*) > 1)").fetchone()[0]
+    dups = conn.execute("SELECT COUNT(*) FROM (SELECT event_date, campaign_id, product_id FROM fact_campaign_product_daily GROUP BY 1, 2, 3 HAVING COUNT(*) > 1)").fetchone()[0]
     conn.close()
-    assert dups == 0, "Duplicates found in fact_ad_events"
+    assert dups == 0, "Duplicates found in fact_campaign_product_daily"
 
-def test_fact_ad_events_cost_non_negative(setup_db):
+def test_fact_table_cost_non_negative(setup_db):
     conn = duckdb.connect(str(setup_db))
-    res = conn.execute("SELECT cost FROM fact_ad_events").fetchall()
+    res = conn.execute("SELECT cost FROM fact_campaign_product_daily").fetchall()
     for row in res:
         cost = row[0]
         assert cost >= 0, "Cost allocation should be non-negative"
     conn.close()
 
-def test_fact_ad_events_total_allocated_cost(setup_db):
+def test_fact_table_total_allocated_cost(setup_db):
     conn = duckdb.connect(str(setup_db))
     allocated_costs = conn.execute("""
         SELECT event_date, campaign_id, SUM(cost) as total_allocated 
-        FROM fact_ad_events 
+        FROM fact_campaign_product_daily 
         GROUP BY 1, 2
     """).fetchall()
     
