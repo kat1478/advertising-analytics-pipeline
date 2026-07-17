@@ -42,3 +42,17 @@ If you do not use `mamba` or `conda`, you can install the dependencies via `pip`
 ```bash
 python -m pip install -r requirements.txt
 ```
+
+## Running the Pipeline
+
+To execute the data pipeline and generate the business report, run the following commands in order:
+
+```bash
+python -m src.generate_data
+python -m src.load_raw
+python -m src.validate_data
+python -m src.run_sql
+python -m src.generate_report
+```
+
+A sample Markdown report will be generated from the analytical marts and saved to `reports/campaign_report.md`.
