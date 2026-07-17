@@ -15,13 +15,13 @@ This report is generated from synthetic advertising data to demonstrate pipeline
 - **Total Impressions:** 10,000
 - **Total Clicks:** 461
 - **Total Conversions:** 99
-- **Total Cost:** 5,118.03 zł
+- **Total Cost:** 9,382.72 zł
 - **Total Revenue:** 40,455.01 zł
 - **Overall CTR:** 4.61%
-- **Overall CPC:** 11.10 zł
+- **Overall CPC:** 20.35 zł
 - **Overall Conversion Rate:** 21.48%
-- **Overall ROAS:** 7.90
-- **Overall Cost per Conversion:** 51.70 zł
+- **Overall ROAS:** 4.31
+- **Overall Cost per Conversion:** 94.77 zł
 
 ## Top Campaigns
 
@@ -29,21 +29,21 @@ This report is generated from synthetic advertising data to demonstrate pipeline
 
 | campaign_name | roas | revenue |
 |---------------|------|---------|
-| Campaign_2 | 22.95 | 2,021.87 zł |
-| Campaign_10 | 21.88 | 2,152.41 zł |
-| Campaign_11 | 16.27 | 3,527.37 zł |
-| Campaign_6 | 16.16 | 2,989.67 zł |
-| Campaign_20 | 14.33 | 2,989.94 zł |
+| Campaign_19 | 19.12 | 2,742.06 zł |
+| Campaign_2 | 15.91 | 2,021.87 zł |
+| Campaign_10 | 15.79 | 2,152.41 zł |
+| Campaign_11 | 11.10 | 3,527.37 zł |
+| Campaign_3 | 9.97 | 1,515.01 zł |
 
 ### Top 5 by Revenue
 
 | campaign_name | revenue | roas |
 |---------------|---------|------|
-| Campaign_8 | 4,002.91 zł | 7.73 |
-| Campaign_4 | 3,875.72 zł | 7.08 |
-| Campaign_11 | 3,527.37 zł | 16.27 |
-| Campaign_20 | 2,989.94 zł | 14.33 |
-| Campaign_6 | 2,989.67 zł | 16.16 |
+| Campaign_8 | 4,002.91 zł | 5.56 |
+| Campaign_4 | 3,875.72 zł | 3.03 |
+| Campaign_11 | 3,527.37 zł | 11.10 |
+| Campaign_20 | 2,989.94 zł | 4.17 |
+| Campaign_6 | 2,989.67 zł | 4.59 |
 
 ### Top 5 by Conversion Rate
 
@@ -67,17 +67,18 @@ No data available.
 
 | campaign_name | cost | roas | revenue |
 |---------------|------|------|---------|
-| Campaign_12 | 477.12 zł | 0.72 | 343.49 zł |
+| Campaign_1 | 1,143.44 zł | 1.33 | 1,515.13 zł |
+| Campaign_12 | 1,141.34 zł | 0.30 | 343.49 zł |
 
 ### Highest Cost per Conversion
 
 | campaign_name | cost_per_conversion | conversions | cost |
 |---------------|---------------------|-------------|------|
-| Campaign_12 | 477.12 zł | 1 | 477.12 zł |
-| Campaign_15 | 176.44 zł | 3 | 529.33 zł |
-| Campaign_1 | 95.57 zł | 5 | 477.86 zł |
-| Campaign_7 | 73.25 zł | 3 | 219.74 zł |
-| Campaign_16 | 64.54 zł | 3 | 193.63 zł |
+| Campaign_12 | 1,141.34 zł | 1 | 1,141.34 zł |
+| Campaign_15 | 241.35 zł | 3 | 724.06 zł |
+| Campaign_1 | 228.69 zł | 5 | 1,143.44 zł |
+| Campaign_20 | 143.44 zł | 5 | 717.21 zł |
+| Campaign_4 | 142.14 zł | 9 | 1,279.30 zł |
 
 ## Category Performance
 
@@ -85,21 +86,21 @@ No data available.
 
 | category | revenue | roas |
 |----------|---------|------|
-| Electronics | 11,379.67 zł | 8.02 |
-| Home | 11,264.15 zł | 11.00 |
-| Sports | 7,129.36 zł | 8.17 |
-| Toys | 5,364.03 zł | 6.24 |
-| Clothing | 5,317.80 zł | 5.64 |
+| Electronics | 11,379.67 zł | 4.34 |
+| Home | 11,264.15 zł | 6.00 |
+| Sports | 7,129.36 zł | 4.49 |
+| Toys | 5,364.03 zł | 3.42 |
+| Clothing | 5,317.80 zł | 3.08 |
 
 ### Top Categories by ROAS
 
 | category | roas | revenue |
 |----------|------|---------|
-| Home | 11.00 | 11,264.15 zł |
-| Sports | 8.17 | 7,129.36 zł |
-| Electronics | 8.02 | 11,379.67 zł |
-| Toys | 6.24 | 5,364.03 zł |
-| Clothing | 5.64 | 5,317.80 zł |
+| Home | 6.00 | 11,264.15 zł |
+| Sports | 4.49 | 7,129.36 zł |
+| Electronics | 4.34 | 11,379.67 zł |
+| Toys | 3.42 | 5,364.03 zł |
+| Clothing | 3.08 | 5,317.80 zł |
 
 ### Categories with Weakest Conversion Rate
 

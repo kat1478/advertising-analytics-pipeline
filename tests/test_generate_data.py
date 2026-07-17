@@ -54,7 +54,13 @@ def test_generate_data_deterministic(tmp_path):
 
 
 def test_generate_data_roas_plausibility(tmp_path):
-    """Overall ROAS must be within a plausible demonstration range."""
+    """Verify ROAS distribution is within a plausible demonstration range.
+
+    Uses broad, non-brittle constraints:
+    - Overall mean campaign ROAS must be within a wide acceptable range.
+    - The portfolio must have at least some lower-performing and some
+      higher-performing campaigns (analytical variety).
+    """
     import duckdb
     from src.load_raw import load_raw_data
     from src.run_sql import execute_sql_files
@@ -69,17 +75,6 @@ def test_generate_data_roas_plausibility(tmp_path):
     execute_sql_files(db_path=db_path, sql_dir=PROJECT_ROOT / "sql")
 
     conn = duckdb.connect(str(db_path))
-    result = conn.execute("""
-        SELECT
-            SUM(revenue) / NULLIF(SUM(cost), 0) AS overall_roas,
-            MIN(SUM(revenue) / NULLIF(SUM(cost), 0)) OVER () AS min_campaign_roas,
-            MAX(SUM(revenue) / NULLIF(SUM(cost), 0)) OVER () AS max_campaign_roas
-        FROM daily_campaign_performance
-        GROUP BY campaign_name
-        ORDER BY overall_roas
-        LIMIT 1
-    """).fetchone()
-
     camp_roas = conn.execute("""
         SELECT
             campaign_name,
@@ -91,21 +86,31 @@ def test_generate_data_roas_plausibility(tmp_path):
     conn.close()
 
     roas_values = [row[1] for row in camp_roas if row[1] is not None]
-    overall_roas = sum(v for v in roas_values) / len(roas_values) if roas_values else 0
+    assert len(roas_values) > 0, "No campaigns with computable ROAS"
 
-    # Overall average ROAS should be within a plausible demonstration range
-    assert 0.5 <= overall_roas <= 30.0, (
-        f"Overall mean campaign ROAS {overall_roas:.2f} is outside plausible range [0.5, 30]"
-    )
-
-    # There must be at least one weak campaign and one strong campaign
+    mean_roas = sum(roas_values) / len(roas_values)
     min_roas = min(roas_values)
     max_roas = max(roas_values)
-    assert min_roas < 3.0, (
-        f"Expected at least one campaign with ROAS < 3.0, got min={min_roas:.2f}. "
-        f"Data lacks analytical variety."
+
+    # Mean ROAS must be within a broadly plausible range for a demonstration dataset.
+    assert 1.0 <= mean_roas <= 25.0, (
+        f"Mean campaign ROAS {mean_roas:.2f} is outside plausible range [1.0, 25.0]"
     )
-    assert max_roas > 2.0, (
-        f"Expected at least one campaign with ROAS > 2.0, got max={max_roas:.2f}. "
-        f"Data lacks analytical variety."
+
+    # Analytical variety: the portfolio must include at least some weaker
+    # and some stronger campaigns.
+    weak_count = len([r for r in roas_values if r < 3.0])
+    strong_count = len([r for r in roas_values if r > 3.0])
+
+    assert weak_count >= 1, (
+        f"Expected at least 1 campaign with ROAS < 3.0 (underperformers), "
+        f"got {weak_count}. Data lacks analytical variety."
+    )
+    assert strong_count >= 1, (
+        f"Expected at least 1 campaign with ROAS > 3.0 (outperformers), "
+        f"got {strong_count}. Data lacks analytical variety."
+    )
+    assert max_roas < 50.0, (
+        f"Maximum campaign ROAS {max_roas:.2f} is unrealistically high (>50). "
+        f"Synthetic economics need recalibration."
     )
