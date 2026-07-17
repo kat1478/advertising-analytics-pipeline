@@ -2,7 +2,7 @@
 
 *(Note: This is a deterministic, rule-based analytics assistant operating on aggregated data marts. No external LLM APIs were used.)*
 
-**Generated At:** 2026-07-17 15:38:58
+**Generated At:** 2026-07-17 16:20:48
 
 ## Campaign Insights
 
