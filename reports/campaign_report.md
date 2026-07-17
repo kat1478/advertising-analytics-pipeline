@@ -5,7 +5,7 @@ This report is generated from synthetic advertising data to demonstrate pipeline
 ## Pipeline Context
 
 - **Source Marts:** `daily_campaign_performance`, `category_performance`
-- **Generated At:** 2026-07-17 12:22:21
+- **Generated At:** 2026-07-17 15:38:56
 - **Note:** Metrics are calculated in SQL marts and aggregated here for reporting.
 
 ## Executive Summary
