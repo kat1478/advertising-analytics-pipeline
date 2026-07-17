@@ -53,6 +53,8 @@ python -m src.load_raw
 python -m src.validate_data
 python -m src.run_sql
 python -m src.generate_report
+python -m src.analytics_assistant
 ```
 
 A sample Markdown report will be generated from the analytical marts and saved to `reports/campaign_report.md`.
+The project includes a rule-based GenAI-style analytics assistant that translates analytical mart metrics into business-readable insights without requiring external LLM APIs, outputting to `reports/analytics_insights.md`.
