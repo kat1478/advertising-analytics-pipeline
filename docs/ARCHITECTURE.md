@@ -4,39 +4,78 @@ This document describes the architectural layout and design choices implemented 
 
 ## Layer Responsibilities
 
-The project follows a standard modern data stack layer pattern:
-1. **Raw**: Unstructured or semi-structured data directly ingested from the synthetic generator into DuckDB tables. It represents the pristine state of data before any business logic is applied.
-2. **Staging**: Cleaned, typed, and deduplicated tables. Staging serves as the foundation for complex joins and acts as a firewall against upstream data quality issues.
-3. **Marts**: Highly modeled business tables (Dimensions and Facts). These tables are aggregated, metric-rich, and ready for end-user reporting.
+The project follows a standard analytical layer pattern:
+
+1. **Raw**: Data directly ingested from the synthetic generator into DuckDB tables. Represents the pristine, unmodified state before any business logic is applied.
+2. **Staging**: Cleaned, typed, and deduplicated tables. Staging acts as a firewall against upstream data quality issues and provides a stable foundation for mart joins.
+3. **Marts**: Business-modeled tables (Dimensions, Fact, and derived aggregates). These tables are metric-rich and designed for reporting consumption.
 
 ## Pipeline Execution Order
 
-The pipeline relies on a strict sequential execution order enforced by Python orchestration:
-1. Synthetic Data Generation
-2. Raw Ingestion into DuckDB
-3. Raw Data Quality Validation
-4. Staging SQL Transformations
-5. Analytical Marts SQL Transformations
-6. Metric Quality Assurance Tests
-7. Markdown Reporting & Insight Generation
+Steps must be run sequentially. There is no single unified orchestrator yet — each step is a standalone Python module:
 
-## Fact Table Grain & Cost Allocation
+```bash
+python -m src.generate_data   # 1. Synthetic data
+python -m src.load_raw        # 2. Raw ingestion into DuckDB
+python -m src.validate_data   # 3. Raw data quality validation
+python -m src.run_sql         # 4. Staging + Mart SQL transformations
+python -m src.generate_report # 5. Markdown report
+python -m src.analytics_assistant  # 6. Business insights
+```
 
-The primary fact table (`fact_ad_events`) resolves data to an individual event grain (impressions, clicks, conversions) tied to a specific `event_date`.
-Because advertising costs are commonly supplied at a daily aggregate campaign level, we use a proportional allocation approach. Daily costs are proportionally distributed across the campaign's impressions to ensure revenue and ROAS can be measured effectively at the lowest grain.
+A unified pipeline runner (`src/run_pipeline.py`) orchestrates steps 1–4 and is available for development convenience. Steps 5–6 are run separately.
+
+## Raw / Staging / Marts Separation
+
+| Layer | Tables | Responsibility |
+|---|---|---|
+| Raw | `raw_campaigns`, `raw_products`, `raw_impressions`, `raw_clicks`, `raw_costs`, `raw_conversions` | Faithful copy of source data |
+| Staging | `stg_campaigns`, `stg_products`, `stg_impressions`, `stg_clicks`, `stg_costs`, `stg_conversions` | Type casting, deduplication, null handling |
+| Marts | `dim_campaigns`, `dim_products`, `fact_campaign_product_daily`, `daily_campaign_performance`, `category_performance` | Business metrics, joins, aggregations |
+
+## Fact Table Grain
+
+The primary fact table is `fact_campaign_product_daily`.
+
+**Grain: `event_date × campaign_id × product_id`**
+
+Each row represents the aggregated advertising activity (impressions, clicks, conversions, allocated cost, revenue) for one campaign advertising one product on one calendar day.  This is **not** an individual-event table — rows are aggregates.
+
+Derived aggregation marts:
+- `daily_campaign_performance` — aggregates `fact_campaign_product_daily` across all products per campaign-day
+- `category_performance` — aggregates across all campaigns per product category (no time dimension)
+
+## Cost Allocation Approach
+
+Advertising costs arrive at the campaign × daily grain (`raw_costs`). The fact table operates at the lower campaign × product × daily grain. Daily campaign costs are distributed proportionally across products based on their share of that campaign's daily impressions:
+
+```
+Product Cost = Campaign Daily Cost × (Product Impressions / Total Campaign Impressions)
+```
+
+Automated tests verify cost reconciliation: the sum of allocated costs per campaign-day must match the source cost (within a 0.01 PLN tolerance).
 
 ## Attribution Choice
 
-The pipeline uses an **impression-based attribution cohort model**. Rather than logging clicks and conversions strictly on the calendar day they occurred, they are joined back to the originating impression's timestamp. This decision guarantees that funnel metrics (`impressions >= clicks >= conversions`) remain mathematically consistent on any given reporting day.
+The pipeline uses **impression-based attribution cohorts**:
+- Clicks and conversions are joined back to the originating impression.
+- All downstream events inherit the impression's `event_date`.
+- This guarantees daily funnel consistency: `impressions >= clicks >= conversions` always holds per cohort day.
+
+This is a deliberate analytical design choice for this project, not the only valid industry model.
 
 ## Reporting Outputs
 
-The finalized metrics are exported into localized Markdown artifacts (`reports/campaign_report.md` and `reports/analytics_insights.md`). This eliminates the need for external BI tools during the portfolio review process and ensures outputs are natively reviewable directly within the GitHub interface.
+Final metrics are exported to Markdown artifacts:
+- `reports/campaign_report.md` — quantitative performance report
+- `reports/analytics_insights.md` — classified campaign recommendations
+
+These files contain only deterministic synthetic data and are safe to commit. Runtime timestamps are not embedded; deterministic metadata (dataset seed, reporting period, currency) is used instead.
 
 ## Why DuckDB?
 
-DuckDB was selected as the local analytical warehouse because:
-- It eliminates the overhead of managing Postgres, Snowflake, or BigQuery instances.
-- It operates incredibly fast on local CSV files and in-memory data processing.
-- It provides a robust, PostgreSQL-compatible SQL dialect capable of heavy analytical window functions.
-- It naturally fits a reproducible "clone-and-run" Python portfolio project.
+DuckDB was selected as the local analytical storage because:
+- It operates as an embedded, file-based database with zero infrastructure setup.
+- It executes analytical SQL queries very efficiently on local data.
+- Its SQL dialect is inspired by PostgreSQL but is not fully compatible — some PostgreSQL extensions are not available.
+- It naturally supports a reproducible "clone-and-run" portfolio project without requiring cloud credentials.

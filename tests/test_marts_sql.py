@@ -25,16 +25,18 @@ def test_marts_tables_exist(setup_db):
     conn.close()
     
     expected_tables = [
-        'dim_campaigns', 'dim_products', 'fact_ad_events', 
+        'dim_campaigns', 'dim_products', 'fact_campaign_product_daily',
         'daily_campaign_performance', 'category_performance'
     ]
     for t in expected_tables:
         assert t in tables, f"{t} should exist"
+    # Verify old table name is not accidentally present
+    assert 'fact_ad_events' not in tables, "old fact_ad_events table should not exist"
 
 def test_marts_tables_not_empty(setup_db):
     conn = duckdb.connect(str(setup_db))
     tables = [
-        'dim_campaigns', 'dim_products', 'fact_ad_events', 
+        'dim_campaigns', 'dim_products', 'fact_campaign_product_daily',
         'daily_campaign_performance', 'category_performance'
     ]
     for t in tables:

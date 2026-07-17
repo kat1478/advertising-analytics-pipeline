@@ -1,60 +1,24 @@
 # Roadmap
 
-## v0.1.0 — Repository foundation
+## Completed
 
-- project scaffold
-- clean README
-- git workflow docs
-- branch protection setup
-- initial CI placeholder
+- **v0.1** — Repository foundation, scaffold, CI placeholder, git workflow
+- **v0.2** — Deterministic synthetic data generation (campaigns, products, impressions, clicks, costs, conversions)
+- **v0.3** — DuckDB raw ingestion, raw data validation, SQL staging and analytical marts, metric quality tests
+- **v0.4** — Markdown performance report and rule-based analytics assistant
+- **v0.5** — Portfolio consistency: metric realism, PLN currency, fact table grain clarification, consolidated insights, documentation alignment
 
-## v0.2.0 — Synthetic data generation
+## Current
 
-- campaigns, products, impressions, clicks, costs, conversions
-- deterministic random seed
-- realistic advertising relationships
-- intentional data quality edge cases
+- **v0.5** is the current stable state of `develop`.
 
-## v0.3.0 — DuckDB raw loading
+## Planned
 
-- load CSV or Parquet into DuckDB
-- create raw tables
-- pipeline entrypoint
-
-## v0.4.0 — SQL staging layer
-
-- typed and cleaned staging tables
-- deduplication
-- basic data quality checks
-
-## v0.5.0 — Analytical marts
-
-- dimensions
-- fact table
-- daily campaign performance
-- category performance
-
-## v0.6.0 — Testing and data quality
-
-- pytest data quality tests
-- metric tests
-- pipeline smoke test
-
-## v0.7.0 — Report generation
-
-- Markdown campaign report
-- top and bottom campaign tables
-- anomaly-style insights
-
-## v0.8.0 — Analytics assistant
-
-- rule-based business insight generator
-- optional local LLM integration later
-
-## v1.0.0 — Portfolio release
-
-- polished README
-- architecture diagram
-- example report
-- full CI passing
-- tagged stable release
+- End-to-end pipeline orchestrator (unified runner for all steps)
+- GitHub Actions hardening (full pipeline CI on every PR)
+- Prefect orchestration
+- Streamlit dashboard for interactive exploration
+- Optional Ollama integration (local LLM-based insight generation)
+- BigQuery-compatible SQL transformations
+- Cloud deployment reference
+- Stable **v1.0** portfolio release (tagged, documented, end-to-end CI passing)

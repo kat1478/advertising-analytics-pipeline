@@ -1,8 +1,8 @@
 # Advertising Analytics Data Pipeline
 
-This is a professional-grade data engineering portfolio project that demonstrates a robust, reproducible pipeline for advertising analytics. 
-The project addresses the business problem of analyzing advertising campaign performance, tracking spending, and evaluating return on ad spend (ROAS).
-It uses a synthetic advertising dataset, mimicking a cloud data warehouse workflow entirely with local tools.
+A data engineering portfolio project demonstrating a reproducible, end-to-end advertising analytics pipeline.
+The project addresses the business problem of analysing advertising campaign performance, tracking spending, and evaluating return on ad spend (ROAS).
+It uses a synthetic advertising dataset and mimics an analytical warehouse workflow entirely with local tools.
 
 ## Project Overview
 
@@ -59,28 +59,28 @@ The pipeline transforms data through several layers:
 **Marts Layer:**
 - `dim_campaigns`
 - `dim_products`
-- `fact_ad_events`
+- `fact_campaign_product_daily` *(grain: event_date × campaign_id × product_id)*
 - `daily_campaign_performance`
 - `category_performance`
 
 ```mermaid
 erDiagram
-    dim_campaigns ||--o{ fact_ad_events : "1 to N"
-    dim_products ||--o{ fact_ad_events : "1 to N"
-    fact_ad_events }o--|| daily_campaign_performance : "Aggregated by"
-    fact_ad_events }o--|| category_performance : "Aggregated by"
+    dim_campaigns ||--o{ fact_campaign_product_daily : "campaign_id"
+    dim_products ||--o{ fact_campaign_product_daily : "product_id"
+    fact_campaign_product_daily }o--o{ daily_campaign_performance : "aggregated into"
+    fact_campaign_product_daily }o--o{ category_performance : "aggregated into"
 ```
 
 ## Advertising Metrics
 
-The pipeline calculates key performance indicators natively:
+The pipeline calculates key performance indicators natively (all monetary values in **PLN**):
 - **CTR (Click-Through Rate)**
 - **CPC (Cost Per Click)**
 - **Conversion Rate**
 - **ROAS (Return on Ad Spend)**
 - **Cost per Conversion**
 
-For detailed definitions, formulas, and metric assumptions, see [docs/METRICS.md](docs/METRICS.md).
+For detailed definitions, formulas, ROAS interpretation ranges, and metric assumptions, see [docs/METRICS.md](docs/METRICS.md).
 
 ## Data Quality
 
