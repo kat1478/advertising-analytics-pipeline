@@ -7,15 +7,14 @@
 - **v0.3** — DuckDB raw ingestion, raw data validation, SQL staging and analytical marts, metric quality tests
 - **v0.4** — Markdown performance report and rule-based analytics assistant
 - **v0.5** — Portfolio consistency: metric realism, PLN currency, fact table grain clarification, consolidated insights, documentation alignment
+- **v0.6** — End-to-end pipeline orchestrator (`src/run_pipeline.py`) and GitHub Actions CI hardening (tests + end-to-end jobs)
 
 ## Current
 
-- **v0.5** is the current stable state of `develop`.
+- **v0.6** is the current stable state of `develop`.
 
 ## Planned
 
-- End-to-end pipeline orchestrator (unified runner for all steps)
-- GitHub Actions hardening (full pipeline CI on every PR)
 - Prefect orchestration
 - Streamlit dashboard for interactive exploration
 - Optional Ollama integration (local LLM-based insight generation)

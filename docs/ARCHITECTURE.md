@@ -12,18 +12,33 @@ The project follows a standard analytical layer pattern:
 
 ## Pipeline Execution Order
 
-Steps must be run sequentially. There is no single unified orchestrator yet — each step is a standalone Python module:
+A unified sequential runner (`src/run_pipeline.py`) executes every step in order within a single Python process:
 
 ```bash
-python -m src.generate_data   # 1. Synthetic data
-python -m src.load_raw        # 2. Raw ingestion into DuckDB
-python -m src.validate_data   # 3. Raw data quality validation
-python -m src.run_sql         # 4. Staging + Mart SQL transformations
-python -m src.generate_report # 5. Markdown report
-python -m src.analytics_assistant  # 6. Business insights
+python -m src.run_pipeline
 ```
 
-A unified pipeline runner (`src/run_pipeline.py`) orchestrates steps 1–4 and is available for development convenience. Steps 5–6 are run separately.
+This is a **sequential, in-process Python orchestrator** — not a distributed workflow scheduler. It does not use Prefect, Airflow, or any external scheduler. Each step is called as a Python function and any failure is propagated immediately.
+
+Steps executed in order:
+1. Synthetic data generation
+2. DuckDB raw ingestion
+3. Raw data validation
+4. SQL staging + mart transformations
+5. Markdown performance report
+6. Analytics insights
+7. Output verification (tables + reports)
+
+Individual steps can also be run manually:
+
+```bash
+python -m src.generate_data
+python -m src.load_raw
+python -m src.validate_data
+python -m src.run_sql
+python -m src.generate_report
+python -m src.analytics_assistant
+```
 
 ## Raw / Staging / Marts Separation
 

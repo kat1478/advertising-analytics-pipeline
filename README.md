@@ -1,5 +1,7 @@
 # Advertising Analytics Data Pipeline
 
+[![CI](https://github.com/kat1478/advertising-analytics-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/kat1478/advertising-analytics-pipeline/actions/workflows/ci.yml)
+
 A data engineering portfolio project demonstrating a reproducible, end-to-end advertising analytics pipeline.
 The project addresses the business problem of analysing advertising campaign performance, tracking spending, and evaluating return on ad spend (ROAS).
 It uses a synthetic advertising dataset and mimics an analytical warehouse workflow entirely with local tools.
@@ -153,32 +155,55 @@ This project uses `mamba` to ensure consistent dependency management.
    mamba activate ads-analytics-pipeline
    ```
 
-Then execute the pipeline steps in sequence:
+### Quick start (one command)
+
+Run the full pipeline with a single command:
+
 ```bash
-python -m src.generate_data
-python -m src.load_raw
-python -m src.validate_data
-python -m src.run_sql
-python -m src.generate_report
-python -m src.analytics_assistant
+python -m src.run_pipeline
+```
+
+This executes all seven steps in order — synthetic data generation, raw loading, validation, staging, marts, Markdown report, and analytics insights — and verifies all outputs before completing.
+
+### Manual execution (individual steps)
+
+Each step can also be run individually in sequence:
+
+```bash
+python -m src.generate_data       # 1. Synthetic data
+python -m src.load_raw            # 2. DuckDB raw ingestion
+python -m src.validate_data       # 3. Raw data validation
+python -m src.run_sql             # 4. Staging + marts SQL
+python -m src.generate_report     # 5. Markdown report
+python -m src.analytics_assistant # 6. Business insights
 ```
 
 ## Testing
 
-Run the full testing suite via pytest:
+Run the full test suite:
 ```bash
 python -m pytest -q
 ```
 
 The tests cover:
-- generation
-- ingestion
-- validation
-- staging
-- marts
-- metric quality
-- reporting
-- analytics insights
+- data generation (determinism, ROAS plausibility)
+- raw ingestion
+- raw data validation
+- SQL staging
+- analytical marts
+- metric quality and bounds
+- Markdown report generation
+- analytics insights (one-per-campaign, PLN currency)
+- end-to-end pipeline orchestration (full run, determinism, failure propagation)
+
+## Continuous Integration
+
+GitHub Actions runs on every pull request and push to `develop` or `master`.
+
+- **tests job**: `python -m compileall src tests scripts` + `python -m pytest -q`
+- **end-to-end job** (runs after tests pass): `python -m src.run_pipeline`, output verification, and a `git diff --exit-code` check confirming that committed sample report artifacts match the pipeline output.
+
+See [docs/CI.md](docs/CI.md) for details.
 
 ## Example Outputs
 
@@ -219,9 +244,17 @@ This repository is built to showcase standard competencies:
 
 ## Roadmap
 
-Future planned improvements:
+Completed:
+- Deterministic synthetic data generation
+- DuckDB raw ingestion and validation
+- SQL staging and analytical marts
+- Advertising metric quality tests
+- Markdown performance report
+- Rule-based analytics assistant (PLN, classified insights)
 - End-to-end pipeline orchestrator
-- GitHub Actions hardening
+- GitHub Actions CI (tests + end-to-end smoke test)
+
+Planned:
 - Prefect orchestration
 - Streamlit dashboard
 - Optional Ollama integration
