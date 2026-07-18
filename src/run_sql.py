@@ -30,7 +30,7 @@ def execute_sql_files(db_path=DATABASE_PATH, sql_dir=PROJECT_ROOT / "sql"):
             marts_order = [
                 "dim_campaigns.sql",
                 "dim_products.sql",
-                "fact_ad_events.sql",
+                "fact_campaign_product_daily.sql",
                 "daily_campaign_performance.sql",
                 "category_performance.sql"
             ]
